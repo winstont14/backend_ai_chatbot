@@ -1,32 +1,40 @@
 <script>
-    const name = localStorage.getItem('nickname') || 'คุณ';
-    const mood = localStorage.getItem('mood') || 'normal';
-    const chatContainer = document.getElementById('chat');
+    window.addEventListener('DOMContentLoaded', () => {
+      const name = localStorage.getItem('nickname') || 'คุณ';
+      const mood = localStorage.getItem('mood') || 'normal';
+      const chatContainer = document.getElementById('chat');
   
-    document.getElementById('welcome').innerText = `สวัสดี ${name} 🤍`;
+      document.getElementById('welcome').innerText = `สวัสดี ${name} 🤍`;
   
-    function appendMessage(role, content) {
-      const div = document.createElement('div');
-      div.className = role === 'user' ? 'msg-user' : 'msg-bot';
-      div.textContent = (role === 'user' ? `${name}: ` : 'Heal 🤍: ') + content;
-      chatContainer.appendChild(div);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
+      function appendMessage(role, content) {
+        const div = document.createElement('div');
+        div.className = role === 'user' ? 'msg-user' : 'msg-bot';
+        div.textContent = (role === 'user' ? `${name}: ` : 'Heal 🤍: ') + content;
+        chatContainer.appendChild(div);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
   
-    async function sendMessage() {
-      const message = document.getElementById('message').value;
-      if (!message) return;
+      window.sendMessage = async function () {
+        const message = document.getElementById('message').value;
+        if (!message) return;
   
-      appendMessage('user', message);
-      document.getElementById('message').value = '';
+        appendMessage('user', message);
+        document.getElementById('message').value = '';
   
-      const res = await fetch('https://backend-ai-chatbot-afu9.onrender.com/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, mood })
-      });
+        try {
+          const res = await fetch('https://backend-ai-chatbot-afu9.onrender.com/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message, mood })
+          });
   
-      const data = await res.json();
-      appendMessage('bot', data.reply || data.error);
-    }
+          const data = await res.json();
+          appendMessage('bot', data.reply || data.error);
+        } catch (err) {
+          appendMessage('bot', '❌ เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์');
+          console.error(err);
+        }
+      };
+    });
   </script>
+  
