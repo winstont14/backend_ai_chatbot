@@ -97,7 +97,7 @@
     </footer>
   </div>
 
-  <script>
+   <script>
     window.addEventListener('DOMContentLoaded', () => {
       const name = localStorage.getItem('nickname') || 'คุณ';
       const mood = localStorage.getItem('mood') || 'normal';
@@ -113,6 +113,9 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }
 
+      // เริ่มต้นให้บอทถามก่อน
+      appendMessage('bot', 'คุณเป็นยังไงบ้าง?');
+
       window.sendMessage = async function () {
         const message = document.getElementById('message').value;
         if (!message) return;
@@ -120,9 +123,8 @@
         appendMessage('user', message);
         document.getElementById('message').value = '';
 
-// const res = await fetch('https://backend-ai-chatbot-afu9.onrender.com/chat'
         try {
-          const res = await fetch('https://backend-ai-chatbot-afu9.onrender.com/chat', {
+           const res = await fetch('https://backend-ai-chatbot-afu9.onrender.com/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message, mood })
