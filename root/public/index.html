@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เริ่มต้น - Heal Chatbot</title>
+  <style>
+    body { font-family: sans-serif; background: #f0f0f0; padding: 2rem; }
+    .container { max-width: 400px; margin: auto; background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    input, button { width: 100%; margin-top: 1rem; padding: 0.5rem; font-size: 1rem; }
+    .moods { display: flex; justify-content: space-around; margin-top: 1rem; }
+    .mood-item { text-align: center; cursor: pointer; padding: 0.5rem; border-radius: 8px; }
+    .mood-icon { font-size: 2rem; }
+    .mood-label { font-size: 0.9rem; margin-top: 0.2rem; color: #555; }
+    .selected { background-color: #d0f0d0; border: 2px solid #0a5; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>ยินดีต้อนรับสู่ Heal Chatbot 🤍</h2>
+    <label>ชื่อเล่นของคุณ</label>
+    <input id="nickname" type="text" placeholder="กรอกชื่อเล่น">
+
+    <label>เลือกอารมณ์ของคุณตอนนี้</label>
+    <div class="moods">
+      <div class="mood-item" data-mood="normal">
+        <div class="mood-icon">🙂</div>
+        <div class="mood-label">ปกติ</div>
+      </div>
+      <div class="mood-item" data-mood="sad">
+        <div class="mood-icon">😢</div>
+        <div class="mood-label">เศร้า</div>
+      </div>
+      <div class="mood-item" data-mood="stressed">
+        <div class="mood-icon">😣</div>
+        <div class="mood-label">เครียด</div>
+      </div>
+      <div class="mood-item" data-mood="lonely">
+        <div class="mood-icon">😔</div>
+        <div class="mood-label">เหงา</div>
+      </div>
+    </div>
+
+    <button onclick="goToChat()">เริ่มพูดคุย</button>
+  </div>
+
+  <script>
+    let selectedMood = null;
+    const icons = document.querySelectorAll('.mood-item');
+    icons.forEach(icon => {
+      icon.addEventListener('click', () => {
+        icons.forEach(i => i.classList.remove('selected'));
+        icon.classList.add('selected');
+        selectedMood = icon.dataset.mood;
+      });
+    });
+
+    function goToChat() {
+      const name = document.getElementById('nickname').value.trim();
+      if (!name) return alert('กรุณากรอกชื่อเล่น');
+      if (!selectedMood) return alert('กรุณาเลือกอารมณ์');
+
+      localStorage.setItem('nickname', name);
+      localStorage.setItem('mood', selectedMood);
+      window.location.href = '/chat.html';
+    }
+  </script>
+</body>
+</html>
